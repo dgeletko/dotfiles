@@ -76,6 +76,8 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawn("rofi -modi drun -show drun -show-icons"), desc="Open run prompt"),
+    Key([mod], "b", lazy.spawn("x-www-browser"), desc="open web browser"),
+    Key([mod], "e", lazy.spawn("pcmanfm"), desc="open file manager"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -111,7 +113,7 @@ layouts = [
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(margin=4, margin_on_single=0),
+    layout.MonadTall(border_focus="#5294e2", margin=4, margin_on_single=0, new_client_position="top"),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -121,7 +123,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
+    font="fira code bold",
     fontsize=12,
     padding=3,
 )
@@ -131,8 +133,9 @@ screens = [
     Screen(
         top=bar.Bar(
             [
+                widget.CurrentLayoutIcon(scale=0.70),
                 #widget.GroupBox(this_current_screen_border="#38a89d", block_highlight_text_color="#ff0000", highlight_method="border"),
-                widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border"),
+                widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
                 widget.Prompt(),
                 widget.WindowName(padding=15),
                 widget.Chord(
@@ -155,7 +158,7 @@ screens = [
                 widget.Sep(padding=15),
                 widget.DF(format=" {p} {uf}{m}", partition="/", visible_on_warn=False, foreground="#95c561"),
                 widget.Sep(padding=15),
-                widget.Battery(format="{char} {percent:2.0%} {hour:d}:{min:02d}", charge_char=" ", discharge_char=" ", foreground="#F6955B"),
+                widget.Battery(format="{char}  {percent:2.0%}", charge_char=" ", discharge_char=" ", foreground="#F6955B"),
                 widget.Sep(padding=15),
                 widget.CheckUpdates(fmt=" {}", distro="Ubuntu",
                                     no_update_string="0", display_format="{updates}",
@@ -167,7 +170,6 @@ screens = [
                 widget.Sep(padding=15),
                 widget.Systray(),
                 widget.QuickExit(default_text=" ", countdown_format="{}"),
-                widget.CurrentLayoutIcon(scale=0.70),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
