@@ -1,0 +1,32 @@
+! font rendering
+!xft.dpi: 96
+xft.dpi: 192
+xft.antialias: true
+xft.hinting: true
+xft.rgba: rgb
+xft.autohint: true
+!xft.hintstyle: hintfull
+xft.hintstyle: hintslight
+xft.lcdfilter: lcdfilter
+
+! font
+*renderFont: true
+*faceName: Fira Code Regular
+*faceSize: 9
+
+! misc
+*termName: xterm-256color
+*saveLines: 5000
+
+! apps
+urxvt*font: xft:Fira Code:size=9:style=Regular
+urxvt*scrollBar_right: true
+urxvt*scrollBar_floating: true
+urxvt*depth: 32
+!urxvt*background: [75]#2e3440
+urxvt*background: [75]#303446
+
+! theme
+!#include ".Xresources.d/nord"
+#include ".Xresources.d/catppuccin/frappe.Xresources"
+
