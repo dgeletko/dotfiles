@@ -25,8 +25,6 @@ require("awful.autofocus") -- ensure there is always a client with focus
 -- third-party libraries
 local has_fdo, freedesktop = pcall(require, "freedesktop") -- freedesktop menu and desktop icon support (https://github.com/lcpz/awesome-freedesktop)
 local vicious = require("vicious") -- widget library (https://github.com/vicious-widgets/vicious)
---local obvious = require("obvious") -- widget library (https://github.com/hoelzro/obvious)
---local apt = require("apt")
 
 --------------------------------------------------
 -- error handling
@@ -72,7 +70,7 @@ beautiful.tasklist_disable_task_name = true
 -- apps
 --------------------------------------------------
 
-local terminal = "kitty"
+local terminal = "x-terminal-emulator"
 local editor = os.getenv("EDITOR") or "vim"
 
 local config = {
@@ -154,20 +152,18 @@ end
 local widgets = {
     separator = wibox.widget.separator({ orientation = "vertical", forced_width = 2, thickness = 2, color = "#81a1c1" }),
     launcher = awful.widget.launcher({ menu = mainmenu, image = gears.filesystem.get_configuration_dir() .. "icons/start-here.svg" }),
-    clock = wibox.widget.textclock("%a %b %d, %H:%M"),
+    clock = wibox.widget.textclock(" %Y-%m-%d %H:%M"),
     calendar = awful.widget.calendar_popup.month(),
-    --updates = wibox.widget.textbox(),
     updates = awful.widget.watch("apt list --upgradable", 15, function(widget, stdout)
         widget:set_text(" " .. gears.string.linecount(stdout) - 2)
-        --widget:set_markup("<span foreground='#6272a4'> " .. gears.string.linecount(stdout) - 2 .. "</span>")
     end),
     kernel = wibox.widget.textbox(),
-    --host = wibox.widget.textbox(),
     cpu = wibox.widget.textbox(),
     mem = wibox.widget.textbox(),
     net = wibox.widget.textbox(),
     battery = wibox.widget.textbox(),
-    disk = wibox.widget.textbox(),
+    disk_root = wibox.widget.textbox(),
+    --disk_home = wibox.widget.textbox(),
     tray = wibox.widget.systray(),
 }
 
@@ -178,17 +174,15 @@ widgets.calendar:attach(widgets.clock, "tr", { on_hover = false })
 --vicious.register(widgets.kernel, vicious.widgets.os, " $2", 60)
 vicious.register(widgets.kernel, vicious.widgets.os,
     function (widget, args)
-        --return "<span foreground='#8be9fd'> " .. args[2]:gsub("-generic", "") .. "</span>"
         return " " .. args[2]:gsub("-generic", "")
     end, 60)
---vicious.register(widgets.host, vicious.widgets.os, " $4", 60)
-vicious.register(widgets.cpu, vicious.widgets.cpu, "<span foreground='#50fa7b'> $1%</span>")
-vicious.register(widgets.mem, vicious.widgets.mem, "<span foreground='#ffb86c'> $1%</span>")
-vicious.register(widgets.net, vicious.widgets.wifi, "<span foreground='#ff79c6'> ${ssid}</span>", 15, "wlp108s0")
-vicious.register(widgets.battery, vicious.widgets.bat, "<span foreground='#bd93f9'> $2%</span> $1", 15, "BAT1")
-vicious.register(widgets.disk, vicious.widgets.fs, "<span foreground='#ff5555'> / ${/ used_p}%</span>", 10)
---fshomewidget = wibox.widget.textbox()
---vicious.register(fshomewidget, vicious.widgets.fs, " /home ${/home used_p}%", 20)
+vicious.register(widgets.cpu, vicious.widgets.cpu, " $1%")
+vicious.register(widgets.mem, vicious.widgets.mem, " $1%")
+vicious.register(widgets.net, vicious.widgets.wifi, " ${ssid}", 15, "wlo1")
+vicious.register(widgets.battery, vicious.widgets.bat, " $2% $1", 15, "BAT0")
+--vicious.register(widgets.battery, vicious.widgets.bat, " $2% $1", 15, "BAT0")
+vicious.register(widgets.disk_root, vicious.widgets.fs, " / ${/ used_p}%", 10)
+--vicious.register(widgets.disk_home, vicious.widgets.fs, " /home ${/home used_p}%", 10)
 
 --------------------------------------------------
 -- key bindings
@@ -260,7 +254,7 @@ local globalkeys = gears.table.join(
     awful.key({modkey}, "Return", function() awful.spawn(terminal) end, {description="open terminal", group="launcher"}),
     awful.key({modkey}, "b", function() awful.spawn("x-www-browser") end, {description="open web browser", group="launcher"}),
     awful.key({modkey}, "e", function() awful.spawn("pcmanfm") end, {description="open file manager", group="launcher"}),
-    awful.key({modkey}, "v", function() awful.spawn("virtualbox -style fusion") end, {description="open virtualbox", group="launcher"}),
+    awful.key({modkey}, "v", function() awful.spawn("virtualbox") end, {description="open virtualbox", group="launcher"}),
 
     -- media
     awful.key({}, "XF86AudioLowerVolume", function() awful.spawn("amixer -q -D pulse sset Master 5%-", false) end,
@@ -278,6 +272,7 @@ local globalkeys = gears.table.join(
 
     -- quit
     --awful.key({modkey}, "x", function() awful.spawn.with_shell(terminal .. " -e light-locker-command --lock") end, {description="lock", group="quit"}),
+    --awful.key({}, "Super_L", function() awful.spawn("light-locker-command --lock", false) end, {description="lock", group="quit"}),
     awful.key({modkey, "Control"}, "x", function() awful.spawn.with_shell("systemctl poweroff") end, {description="poweroff", group="quit"})
 )
 
@@ -396,7 +391,22 @@ local function set_wallpaper(s)
     end
 end
 
+local colors = {
+    --"#f4b8e4", -- pink
+    "#ca9ee6", -- mauve
+    "#e78284", -- red
+    "#ef9f76", -- peach
+    "#e5c890", -- yellow
+    "#a6d189", -- green
+    "#81c8be", -- teal
+    "#8caaee", -- blue
+    "#85c1dc", -- sapphire
+    "#c6d0f5", -- text
+}
+
 -- per screen setup
+-- TODO dg (dpi)
+--awful.screen.set_auto_dpi_enabled(true)
 awful.screen.connect_for_each_screen(function(s)
     -- wallpaper
     set_wallpaper(s)
@@ -472,44 +482,61 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             spacing = 8,
             widgets.separator,
+            {
+                widgets.kernel,
+                fg = colors[1],
+                widget = wibox.container.background,
+            },
+            widgets.separator,
+            {
+                widgets.cpu,
+                fg = colors[2],
+                widget = wibox.container.background,
+            },
+            widgets.separator,
+            {
+                widgets.mem,
+                fg = colors[3],
+                widget = wibox.container.background,
+            },
+            widgets.separator,
+            {
+                widgets.disk_root,
+                fg = colors[4],
+                widget = wibox.container.background,
+            },
+            --widgets.separator,
             --{
-            --    --wibox.widget.textbox(" "),
-            --    wibox.widget.textbox(""),
-            --    fg = "#5294e2",
+            --    widgets.disk_home,
+            --    fg = colors[4],
             --    widget = wibox.container.background,
             --},
-            --widgets.kernel,
-            --widgets.separator,
-            widgets.kernel,
-            --widgets.separator,
-            --{
-            --    widgets.kernel,
-            --    --fg = "#ff0000",
-            --    fg = "#404552",
-            --    bg = "#5294e2",
-            --    widget = wibox.container.background,
-            --    shape = gears.shape.rounded_rect,
-            --    --shape = gears.shape.rectangular_tag,
-            --    --shape = gears.shape.powerline,
-            --    forced_width = 90,
-            --},
-            --widgets.separator,
-            --widgets.host,
             widgets.separator,
-            widgets.cpu,
+            {
+                widgets.net,
+                fg = colors[5],
+                widget = wibox.container.background,
+            },
             widgets.separator,
-            widgets.mem,
+            {
+                widgets.battery,
+                fg = colors[6],
+                widget = wibox.container.background,
+            },
             widgets.separator,
-            widgets.disk,
+            {
+                widgets.updates,
+                fg = colors[7],
+                widget = wibox.container.background,
+            },
             widgets.separator,
-            widgets.net,
-            widgets.separator,
-            widgets.battery,
-            widgets.separator,
-            widgets.updates,
+            {
+                widgets.clock,
+                fg = colors[8],
+                widget = wibox.container.background,
+            },
             widgets.separator,
             widgets.tray,
-            widgets.clock,
             s.widgets.layoutbox,
         },
     }
@@ -553,6 +580,7 @@ awful.rules.rules = {
           "Cisco AnyConnect Secure Mobility Client",
           "Gpick",
           "Lxappearance",
+          "Microsoft Teams - Preview",
           "PulseUI",
           "Sxiv",
           "VirtualBox",
@@ -571,8 +599,40 @@ awful.rules.rules = {
     },
 
     -- app specific rules
-    { rule = { class = "Firefox" },
+    { rule = { class = "firefox" },
       properties = { screen = 1, tag = "1" }
+    },
+
+    { rule = { class = "Brave-browser" },
+      properties = { screen = 1, tag = "1" }
+    },
+    --{ rule = {
+    --    class = {
+    --      "Firefox",
+    --      "Brave-browser",
+    --    },
+    --  },
+    --  properties = { screen = 1, tag = "1" }
+    --},
+
+    -- nasa specific
+    { rule_any = {
+        class = {
+          "ASIST_STATUS",
+          "FastX",
+          "Simics-common",
+          "SPUDNIK", -- asist
+          "stol_gui", -- itos
+          "XDsp_mnepage", -- itos
+          "XGstol", -- itos
+          "gov-nasa-gsfc-itos-log_display-EventViewerApplication", -- itos
+        },
+        name = {
+          "Event Window on asist",
+          "Serial Console", -- simics console (xterm)
+        },
+      },
+      properties = { floating = true }
     },
 }
 
