@@ -7,6 +7,7 @@ xrdb ~/.Xresources
 nitrogen --restore
 
 nm-applet &
+pkill pasystray
 pasystray &
-#blueman-applet &
+blueman-applet &
 
