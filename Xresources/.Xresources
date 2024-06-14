@@ -24,7 +24,7 @@ urxvt*scrollBar_right: true
 urxvt*scrollBar_floating: true
 urxvt*depth: 32
 !urxvt*background: [75]#2e3440
-urxvt*background: [75]#303446
+urxvt*background: [85]#303446
 
 ! theme
 !#include ".Xresources.d/nord"
