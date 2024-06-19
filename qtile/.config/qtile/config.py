@@ -24,6 +24,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#   ▌      ▜    ▐  ▌     
+# ▞▀▌▞▀▌▞▀▖▐ ▞▀▖▜▀ ▌▗▘▞▀▖
+# ▌ ▌▚▄▌▛▀ ▐ ▛▀ ▐ ▖▛▚ ▌ ▌
+# ▝▀▘▗▄▘▝▀▘ ▘▝▀▘ ▀ ▘ ▘▝▀ 
+
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
@@ -170,6 +175,20 @@ screens = [
                 widget.Sep(padding=15),
                 widget.Systray(),
                 widget.QuickExit(default_text=" ", countdown_format="{}"),
+            ],
+            24,
+            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            #margin = 4,
+            #opacity = 0.8,
+        ),
+    ),
+    Screen(
+        top=bar.Bar(
+            [
+                widget.CurrentLayoutIcon(scale=0.70),
+                widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
+                widget.WindowName(font="fira code", padding=15),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
