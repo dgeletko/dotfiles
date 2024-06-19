@@ -40,7 +40,9 @@ import subprocess
 from pathlib import Path
 
 mod = "mod4"
-terminal = guess_terminal()
+mod1 = "mod1"
+terminal = guess_terminal("kitty")
+fm = "pcmanfm"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -63,6 +65,8 @@ keys = [
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating"),
+    Key([mod], "m", lazy.window.toggle_maximize(), desc="Toggle maximize"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -80,9 +84,16 @@ keys = [
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod1, "control"], "p", lazy.spawn("systemctl poweroff"), desc="Power off"),
+    Key([mod1, "control"], "r", lazy.spawn("systemctl reboot"), desc="Reboot"),
+    Key([mod1, "control"], "l", lazy.spawn("light-locker-command --lock"), desc="Lock screen"),
     Key([mod], "r", lazy.spawn("rofi -modi drun -show drun -show-icons"), desc="Open run prompt"),
     Key([mod], "b", lazy.spawn("x-www-browser"), desc="open web browser"),
-    Key([mod], "e", lazy.spawn("pcmanfm"), desc="open file manager"),
+    Key([mod], "e", lazy.spawn(fm), desc="open file manager"),
+    Key([mod], "v", lazy.spawn("virtualbox"), desc="open virtualbox"),
+    # Toggle screens
+    Key([mod], "o", lazy.next_screen(), desc="Focus next monitor"),
+    Key([mod], "s", lazy.display_kb(), desc="Display keybindings"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -130,7 +141,7 @@ layouts = [
 widget_defaults = dict(
     font="fira code bold",
     fontsize=12,
-    padding=3,
+    padding=2,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -142,7 +153,7 @@ screens = [
                 #widget.GroupBox(this_current_screen_border="#38a89d", block_highlight_text_color="#ff0000", highlight_method="border"),
                 widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
                 widget.Prompt(),
-                widget.WindowName(padding=15),
+                widget.WindowName(font="fira code", padding=15),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
