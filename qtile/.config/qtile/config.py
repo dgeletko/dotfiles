@@ -163,7 +163,6 @@ screens = [
                 widget.Sep(padding=15),
                 #widget.TextBox(text="", fontsize=34),
                 #widget.TextBox(text="\u25e2", fontsize=48, margin=0, padding=0, foreground="#11121d"),
-                #widget.GenPollText(func=lambda: " " + os.uname().release.removesuffix("-generic"), foreground="#d7a65f", background="#353945"),
                 widget.GenPollText(func=lambda: " " + os.uname().release.removesuffix("-generic"), foreground="#d7a65f"),
                 #widget.TextBox(text="\u25e4", fontsize=34, padding=0, padding_y=-5, foreground="#353945"),
                 #widget.TextBox(text="", fontsize=34),
