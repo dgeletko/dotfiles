@@ -578,6 +578,8 @@ awful.rules.rules = {
           "Arandr",
           "Blueman-manager",
           "Cisco AnyConnect Secure Mobility Client",
+          "Com.cisco.anyconnect.gui",
+          "Com.cisco.secureclient.gui",
           "Gpick",
           "Lxappearance",
           "Microsoft Teams - Preview",
