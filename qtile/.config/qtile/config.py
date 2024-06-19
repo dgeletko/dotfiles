@@ -232,6 +232,20 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        # personal
+        Match(wm_class="arandr"),
+        Match(wm_class="blueman-manager"),
+        Match(wm_class="com.cisco.anyconnect.gui"),
+        Match(wm_class="com.cisco.secureclient.gui"),
+        Match(wm_class="gpick"),
+        Match(wm_class="lxappearance"),
+        Match(wm_class="pulseui"),
+        Match(wm_class="sxiv"),
+        Match(wm_class="virtualbox"),
+        Match(wm_class="virtualbox manager"),
+        Match(wm_class="virtualbox machine"),
+        Match(title="event tester"), # xev
+        Match(title="Sign in to Security Device"), # brave pin entry
     ]
 )
 auto_fullscreen = True
