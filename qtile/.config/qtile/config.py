@@ -240,10 +240,10 @@ floating_layout = layout.Floating(
         Match(wm_class="lxappearance"),
         Match(wm_class="pulseui"),
         Match(wm_class="sxiv"),
-        Match(wm_class="virtualbox"),
-        Match(wm_class="virtualbox manager"),
-        Match(wm_class="virtualbox machine"),
-        Match(title="event tester"), # xev
+        Match(wm_class="VirtualBox"),
+        Match(wm_class="VirtualBox Manager"),
+        Match(wm_class="VirtualBox Machine"),
+        Match(title="Event Tester"), # xev
         Match(title="Sign in to Security Device"), # brave pin entry
     ]
 )
