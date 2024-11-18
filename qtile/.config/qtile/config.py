@@ -130,6 +130,7 @@ layouts = [
     # layout.Bsp(),
     # layout.Matrix(),
     layout.MonadTall(border_focus="#5294e2", margin=4, margin_on_single=0, new_client_position="top"),
+    layout.Floating(border_focus="#5294e2"),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -190,7 +191,7 @@ screens = [
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
             #margin = 4,
-            #opacity = 0.8,
+            opacity = 0.8,
         ),
     ),
     Screen(
@@ -204,7 +205,7 @@ screens = [
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
             #margin = 4,
-            #opacity = 0.8,
+            opacity = 0.8,
         ),
     ),
 ]
@@ -218,7 +219,8 @@ mouse = [
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
-follow_mouse_focus = True
+#follow_mouse_focus = True
+follow_mouse_focus = False
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
