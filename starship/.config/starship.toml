@@ -1,0 +1,105 @@
+#right_format = "$all"
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$package\
+$python\
+$fill\
+$jobs\
+$cmd_duration\
+$line_break\
+$status\
+$character\
+"""
+
+right_format = """$all"""
+
+palette = "catppuccin_macchiato"
+
+[username]
+format = "[$user]($style)"
+style_user = "bold green"
+show_always = true
+disabled = false
+
+[hostname]
+ssh_only = false
+style = "dimmed green"
+format = "[@$hostname]($style) "
+disabled = false
+
+[status]
+disabled = false
+format = "[$symbol$status]($style) "
+
+[cmd_duration]
+min_time = 500
+format = "[$duration]($style) "
+
+[directory]
+truncation_length = 12
+truncate_to_repo = false
+truncation_symbol = ".../"
+read_only = "  "
+#style = "bold cyan"
+style = "bold lavender"
+
+[fill]
+symbol = " "
+
+[cmake]
+format = "[$symbol]($style)"
+symbol = "󱥒 "
+
+[python]
+symbol = " "
+format = '[${symbol} ${pyenv_prefix}(\($virtualenv\) )]($style)'
+
+[character]
+#success_symbol = "[󱆃 ❯](bold green)"
+#error_symbol = "[󱆃 ❯](bold red)"
+success_symbol = "[](bold green)"
+error_symbol = "[](bold red)"
+
+[git_branch]
+format = "[$symbol$branch]($style)"
+
+[git_commit]
+only_detached = true
+format = '[\(($hash )\($tag\)\)]($style)'
+tag_disabled = false
+tag_symbol = "󰓹 "
+style = "flamingo"
+
+[palettes.catppuccin_macchiato]
+rosewater = "#f4dbd6"
+flamingo = "#f0c6c6"
+pink = "#f5bde6"
+mauve = "#c6a0f6"
+red = "#ed8796"
+maroon = "#ee99a0"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+teal = "#8bd5ca"
+sky = "#91d7e3"
+sapphire = "#7dc4e4"
+blue = "#8aadf4"
+lavender = "#b7bdf8"
+text = "#cad3f5"
+subtext1 = "#b8c0e0"
+subtext0 = "#a5adcb"
+overlay2 = "#939ab7"
+overlay1 = "#8087a2"
+overlay0 = "#6e738d"
+surface2 = "#5b6078"
+surface1 = "#494d64"
+surface0 = "#363a4f"
+base = "#24273a"
+mantle = "#1e2030"
+crust = "#181926"
+
