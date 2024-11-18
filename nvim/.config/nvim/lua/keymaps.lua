@@ -1,1 +1,3 @@
-vim.keymap.set('n', '<leader>nh', '<cmd>nohlsearch<cr>', { desc = 'remove search highlights' })
+-- remove highlights
+vim.keymap.set('n', '<esc>', '<cmd>nohlsearch<cr>', { desc = 'remove search highlights' })
+

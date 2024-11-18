@@ -1,49 +1,71 @@
 return {
-  'VonHeikemen/lsp-zero.nvim',
+  'neovim/nvim-lspconfig',
   dependencies = {
-    'neovim/nvim-lspconfig',
-    'williamboman/mason.nvim',
+    { 'williamboman/mason.nvim', config = true },
     'williamboman/mason-lspconfig.nvim',
     'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/nvim-cmp',
-    'l3mon4d3/luasnip'
+    --'j-hui/fidget.nvim',
   },
   config = function()
-    local lsp_zero = require('lsp-zero')
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+      callback = function(event)
+        local map = function(mode, keys, func, desc)
+            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'lsp: ' .. desc })
+        end
 
-    lsp_zero.on_attach(function(client, bufnr)
-      lsp_zero.default_keymaps( { buffer = bufnr } )
-    end)
-
-    require('mason').setup()
-    require('mason-lspconfig').setup({
-      ensure_installed = {'lua_ls', 'clangd'},
-      handlers = {
-        lsp_zero.default_setup,
-      },
+        map('n', 'gd', vim.lsp.buf.definition, 'goto definition')
+        map('n', 'gD', vim.lsp.buf.declaration, 'goto declaration')
+        map('n', 'gr', require('telescope.builtin').lsp_references, 'goto references')
+        map('n', 'gh', vim.lsp.buf.hover, 'goto help')
+        map('n', '<leader>rn', vim.lsp.buf.rename, 'rename variable')
+        map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, 'code action')
+      end,
     })
 
-    require('lspconfig').lua_ls.setup({
-      settings = {
-        Lua = {
-          workspace = {
-            ignoreSubmodules = false,
-            checkThirdParty = false,
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
+    local servers = {
+      clangd = {},
+
+      lua_ls = {
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              ignoreSubmodules = false,
+              checkThirdParty = false,
+            },
           },
         },
       },
-    })
-    --require('lspconfig').clangd.setup()
-    lsp_zero.setup_servers({'lua_ls', 'clangd'})
 
-    local cmp = require('cmp')
-    cmp.setup({
-      sources = {
-        {name = 'path'},
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
+      pylsp = {
+        settings = {
+          pylsp = {
+            plugins = {
+              pycodestyle = {
+                ignore = { 'W391' },
+                maxLineLength = 100,
+              },
+            },
+          },
+        },
       },
-      formatting = lsp_zero.cmp_format(),
+    }
+
+    require('mason-lspconfig').setup({
+      ensure_installed = vim.tbl_keys(servers or {}),
+      handlers = {
+        function(server_name)
+          local server = servers[server_name] or {}
+          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+          require('lspconfig')[server_name].setup(server)
+        end,
+      },
     })
   end
 }

@@ -1,11 +1,27 @@
 return {
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
-  config = function()
-    local configs = require('nvim-treesitter.configs')
-    configs.setup({
-      ensure_installed = {'bash', 'c', 'cmake', 'cpp', 'dockerfile', 'lua', 'make', 'meson', 'vim', 'python', 'yaml'},
-    })
-  end
+  main = 'nvim-treesitter.configs',
+  opts = {
+    ensure_installed = {
+      'bash',
+      'c',
+      'cmake',
+      'c_sharp',
+      'cpp',
+      'dockerfile',
+      'json',
+      'lua',
+      'make',
+      'meson',
+      'python',
+      'vim',
+      'xml',
+      'yaml',
+    },
+    highlight = {
+      enable = true,
+    },
+  },
 }
 
