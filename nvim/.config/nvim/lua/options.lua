@@ -22,9 +22,23 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.showmatch = true
 
+-- windows
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
 -- misc
---vim.opt.colorcolumn = '100'
-vim.opt.cursorline = true
-vim.opt.signcolumn = 'yes'
+vim.opt.undofile = true
+
+-- ui
 vim.opt.termguicolors = true
+vim.opt.mouse = 'a'
+vim.opt.signcolumn = 'yes'
+vim.opt.colorcolumn = '100'
+vim.opt.cursorline = true
+
+vim.schedule(
+  function()
+    vim.opt.clipboard = 'unnamedplus'
+  end
+)
 
