@@ -178,7 +178,7 @@ screens = [
                 widget.Sep(padding=15),
                 widget.CheckUpdates(fmt=" {}", distro="Ubuntu",
                                     no_update_string="0", display_format="{updates}",
-                                    custom_command="apt list --upgradable | wc -l",
+                                    custom_command="apt list --upgradable",
                                     custom_command_modify=(lambda x: x-1),
                                     colour_have_updates="#a485dd", colour_no_updates="#a485dd"),
                 widget.Sep(padding=15),
