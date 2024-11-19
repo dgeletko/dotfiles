@@ -3,6 +3,9 @@ return {
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
+  init = function()
+    vim.opt.showmode = false
+  end,
   config = true,
 }
 
