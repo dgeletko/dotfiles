@@ -6,7 +6,7 @@ return {
   config = function()
     local oil = require('oil')
     oil.setup({ })
-    vim.keymap.set('n', '-', oil.open_float, { desc = 'open parent directory' })
+    vim.keymap.set('n', '-', oil.open_float, { desc = 'open directory' })
   end
 }
 

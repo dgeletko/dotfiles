@@ -33,7 +33,7 @@ vim.opt.undofile = true
 vim.opt.termguicolors = true
 vim.opt.mouse = 'a'
 vim.opt.signcolumn = 'yes'
-vim.opt.colorcolumn = '100'
+vim.opt.colorcolumn = '120'
 vim.opt.cursorline = true
 
 vim.schedule(

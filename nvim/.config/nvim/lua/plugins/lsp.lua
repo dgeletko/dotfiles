@@ -16,6 +16,7 @@ return {
 
         map('n', 'gd', vim.lsp.buf.definition, 'goto definition')
         map('n', 'gD', vim.lsp.buf.declaration, 'goto declaration')
+        map('n', 'gI', require('telescope.builtin').lsp_implementations, 'goto implementation')
         map('n', 'gr', require('telescope.builtin').lsp_references, 'goto references')
         map('n', 'gh', vim.lsp.buf.hover, 'goto help')
         map('n', '<leader>rn', vim.lsp.buf.rename, 'rename variable')
