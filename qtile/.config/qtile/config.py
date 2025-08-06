@@ -90,7 +90,7 @@ keys = [
     Key([mod], "r", lazy.spawn("rofi -modi drun -show drun -show-icons"), desc="Open run prompt"),
     Key([mod], "b", lazy.spawn("x-www-browser"), desc="open web browser"),
     Key([mod], "e", lazy.spawn(fm), desc="open file manager"),
-    Key([mod], "v", lazy.spawn("virtualbox"), desc="open virtualbox"),
+    Key([mod], "v", lazy.spawn("virtualbox -style gtk2"), desc="open virtualbox"),
     # Toggle screens
     Key([mod], "o", lazy.next_screen(), desc="Focus next monitor"),
     Key([mod], "s", lazy.display_kb(), desc="Display keybindings"),
@@ -254,6 +254,7 @@ floating_layout = layout.Floating(
         Match(wm_class="pulseui"),
         Match(wm_class="sxiv"),
         Match(wm_class="VirtualBox"),
+        Match(wm_class="VirtualBoxVM"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="VirtualBox Machine"),
         Match(title="Event Tester"), # xev
