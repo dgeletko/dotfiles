@@ -30,7 +30,7 @@
 # ▝▀▘▗▄▘▝▀▘ ▘▝▀▘ ▀ ▘ ▘▝▀ 
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
@@ -121,6 +121,17 @@ for i in groups:
             #     desc="move focused window to group {}".format(i.name)),
         ]
     )
+
+groups.append(
+    ScratchPad("scratchpad", [
+        DropDown("music", ["kitty", "--class=cmus", "-e", "cmus"], height=0.50),
+    ]),
+)
+keys.extend(
+    [
+        Key([], "F10", lazy.group["scratchpad"].dropdown_toggle("music")),
+    ]
+)
 
 layouts = [
     layout.Columns(border_focus="#5294e2", border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2, margin=4, margin_on_single=0),
