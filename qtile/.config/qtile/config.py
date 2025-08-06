@@ -150,7 +150,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayoutIcon(scale=0.70),
+                widget.CurrentLayout(scale=0.70, mode="icon"),
                 #widget.GroupBox(this_current_screen_border="#38a89d", block_highlight_text_color="#ff0000", highlight_method="border"),
                 widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
                 widget.Prompt(),
@@ -197,7 +197,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayoutIcon(scale=0.70),
+                widget.CurrentLayout(scale=0.70, mode="icon"),
                 widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
                 widget.WindowName(font="fira code", padding=15),
             ],
