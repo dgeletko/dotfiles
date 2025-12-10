@@ -2,7 +2,7 @@ return {
   'neovim/nvim-lspconfig',
   dependencies = {
     { 'williamboman/mason.nvim', config = true },
-    'williamboman/mason-lspconfig.nvim',
+    --'williamboman/mason-lspconfig.nvim',
     'hrsh7th/cmp-nvim-lsp',
     --'j-hui/fidget.nvim',
   },
@@ -27,47 +27,42 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-    local servers = {
-      clangd = {},
+    local lspconfig = require('lspconfig')
 
-      lua_ls = {
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
+    lspconfig.pylsp.setup {
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = {
+              enabled = true,
+              ignore = { 'W391', 'E501' },
+              maxLineLength = 110,
             },
-            workspace = {
-              ignoreSubmodules = false,
-              checkThirdParty = false,
+            pyflakes = {
+              enabled = false,
             },
-          },
-        },
-      },
-
-      pylsp = {
-        settings = {
-          pylsp = {
-            plugins = {
-              pycodestyle = {
-                ignore = { 'W391' },
-                maxLineLength = 100,
-              },
+            pylint = {
+              enabled = false,
             },
           },
         },
       },
     }
 
-    require('mason-lspconfig').setup({
-      ensure_installed = vim.tbl_keys(servers or {}),
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
+    lspconfig.lua_ls.setup {
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            ignoreSubmodules = false,
+            checkThirdParty = false,
+          },
+        },
       },
-    })
+    }
+
   end
 }
 

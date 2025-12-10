@@ -36,6 +36,12 @@ vim.opt.signcolumn = 'yes'
 vim.opt.colorcolumn = '120'
 vim.opt.cursorline = true
 
+-- lsp
+vim.diagnostic.config({
+    virtual_text = true,
+    --virtual_text = { current_line = true, },
+})
+
 vim.schedule(
   function()
     vim.opt.clipboard = 'unnamedplus'
