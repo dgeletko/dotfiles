@@ -94,6 +94,8 @@ keys = [
     # Toggle screens
     Key([mod], "o", lazy.next_screen(), desc="Focus next monitor"),
     Key([mod], "s", lazy.display_kb(), desc="Display keybindings"),
+    #Key([mod1], "Tab", lazy.group.next_window(), desc="Focus next window"),
+    #Key([mod1, "shift"], "Tab", lazy.group.previous_window(), desc="Focus previous window"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -152,7 +154,7 @@ layouts = [
 
 widget_defaults = dict(
     font="fira code bold",
-    fontsize=12,
+    fontsize=11,
     padding=2,
 )
 extension_defaults = widget_defaults.copy()
@@ -166,6 +168,7 @@ screens = [
                 widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
                 widget.Prompt(),
                 widget.WindowName(font="fira code", padding=15),
+                #widget.TaskList(font="fira code"),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
@@ -173,17 +176,11 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Sep(padding=15),
-                #widget.TextBox(text="", fontsize=34),
-                #widget.TextBox(text="\u25e2", fontsize=48, margin=0, padding=0, foreground="#11121d"),
-                widget.GenPollText(func=lambda: " " + os.uname().release.removesuffix("-generic"), foreground="#d7a65f"),
-                #widget.TextBox(text="\u25e4", fontsize=34, padding=0, padding_y=-5, foreground="#353945"),
-                #widget.TextBox(text="", fontsize=34),
+                widget.CPU(format="cpu {load_percent:>2.1f}%", foreground="#ee6d85"),
                 widget.Sep(padding=15),
-                widget.CPU(format=" {load_percent:>2.1f}%", foreground="#ee6d85"),
+                widget.Memory(format="ram {MemUsed:.1f}{mm} {MemPercent:>2.0f}%", measure_mem="G", foreground="#7199ee"),
                 widget.Sep(padding=15),
-                widget.Memory(format=" {MemUsed:.1f}{mm} ({MemPercent:>2.0f}%)", measure_mem="G", foreground="#7199ee"),
-                widget.Sep(padding=15),
-                widget.DF(format=" {p} {uf}{m}", partition="/", visible_on_warn=False, foreground="#95c561"),
+                widget.DF(format="{p} {uf}{m} {r:>2.1f}%", partition="/", visible_on_warn=False, foreground="#95c561"),
                 widget.Sep(padding=15),
                 widget.Battery(format="{char} {percent:>2.0%}", charge_char=" ", discharge_char=" ", foreground="#F6955B"),
                 widget.Sep(padding=15),
@@ -253,6 +250,9 @@ floating_layout = layout.Floating(
         Match(wm_class="lxappearance"),
         Match(wm_class="pulseui"),
         Match(wm_class="sxiv"),
+        #Match(wm_class="virt-manager") & Match(title="Virtual Machine Manager"),
+        #Match(wm_class="virt-manager") & ~Match(title="Virtual Machine Manager"),
+        Match(wm_class="virt-manager"),
         Match(wm_class="VirtualBox"),
         Match(wm_class="VirtualBoxVM"),
         Match(wm_class="VirtualBox Manager"),
