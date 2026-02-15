@@ -1,5 +1,6 @@
 return {
   'nvim-treesitter/nvim-treesitter',
+  branch = 'master',
   build = ':TSUpdate',
   main = 'nvim-treesitter.configs',
   opts = {
@@ -7,7 +8,6 @@ return {
       'bash',
       'c',
       'cmake',
-      'c_sharp',
       'cpp',
       'dockerfile',
       'json',
