@@ -24,10 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#   ▌      ▜    ▐  ▌     
+#   ▌      ▜    ▐  ▌
 # ▞▀▌▞▀▌▞▀▖▐ ▞▀▖▜▀ ▌▗▘▞▀▖
 # ▌ ▌▚▄▌▛▀ ▐ ▛▀ ▐ ▖▛▚ ▌ ▌
-# ▝▀▘▗▄▘▝▀▘ ▘▝▀▘ ▀ ▘ ▘▝▀ 
+# ▝▀▘▗▄▘▝▀▘ ▘▝▀▘ ▀ ▘ ▘▝▀
 
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
@@ -159,6 +159,8 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+reconfigure_screens = True
+
 screens = [
     Screen(
         top=bar.Bar(
@@ -180,17 +182,17 @@ screens = [
                 widget.Sep(padding=15),
                 widget.Memory(format="ram {MemUsed:.1f}{mm} {MemPercent:>2.0f}%", measure_mem="G", foreground="#7199ee"),
                 widget.Sep(padding=15),
-                widget.DF(format="{p} {uf}{m} {r:>2.0f}%", partition="/", visible_on_warn=False, foreground="#95c561"),
+                widget.DF(format="{p} {uf:>.0f}{m} {r:>2.0f}%", partition="/", visible_on_warn=False, foreground="#95c561"),
                 widget.Sep(padding=15),
                 widget.Battery(format="{char} {percent:>2.0%}", charge_char=" ", discharge_char=" ", foreground="#F6955B"),
                 widget.Sep(padding=15),
-                widget.CheckUpdates(fmt=" {}", distro="Ubuntu",
+                widget.CheckUpdates(fmt="  {}", distro="Ubuntu",
                                     no_update_string="0", display_format="{updates}",
                                     custom_command="apt list --upgradable",
                                     custom_command_modify=(lambda x: x-1),
                                     colour_have_updates="#a485dd", colour_no_updates="#a485dd"),
                 widget.Sep(padding=15),
-                widget.Clock(format=" %Y-%m-%d %I:%M", foreground="#38a89d"),
+                widget.Clock(format="  %Y-%m-%d %I:%M", foreground="#38a89d"),
                 widget.Sep(padding=15),
                 widget.Systray(),
                 widget.QuickExit(default_text=" ", countdown_format="{}"),
@@ -198,8 +200,8 @@ screens = [
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-            #margin = 4,
-            opacity = 0.8,
+            #margin=4,
+            opacity=0.8,
         ),
     ),
     Screen(
@@ -212,8 +214,22 @@ screens = [
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-            #margin = 4,
-            opacity = 0.8,
+            #margin=4,
+            opacity=0.8,
+        ),
+    ),
+    Screen(
+        top=bar.Bar(
+            [
+                widget.CurrentLayout(scale=0.70, mode="icon"),
+                widget.GroupBox(this_current_screen_border="#7199ee", highlight_method="border", hide_unused=True),
+                widget.WindowName(font="fira code", padding=15),
+            ],
+            24,
+            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            #margin=4,
+            opacity=0.8,
         ),
     ),
 ]
@@ -259,6 +275,7 @@ floating_layout = layout.Floating(
         Match(wm_class="VirtualBox Machine"),
         Match(title="Event Tester"), # xev
         Match(title="Sign in to Security Device"), # brave pin entry
+        Match(title="Unlock Security Device"), # brave pin entry
     ]
 )
 auto_fullscreen = True
@@ -281,6 +298,10 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+@hook.subscribe.screens_reconfigured
+def fix_backbround():
+    subprocess.run(["nitrogen", "--restore"])
 
 @hook.subscribe.startup_once
 def autostart():
